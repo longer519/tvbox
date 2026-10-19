@@ -42,8 +42,9 @@ def md5_url(url, timeout=180):
     with open(tmp, "rb") as f:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
+    size = os.path.getsize(tmp)
     os.remove(tmp)
-    return h.hexdigest(), os.path.getsize(tmp)
+    return h.hexdigest(), size
 
 
 def repo_slug():
@@ -143,7 +144,7 @@ def main():
     if remote:
         print()
         base = "https://cdn.jsdelivr.net/gh/%s@main" % repo
-        for f in ("config.json", "config-lite.json", "live/cn.m3u", "live/live.txt"):
+        for f in ("config.json", "config-lite.json", "live/live.txt", "live/ccsh_lite.txt"):
             u = "%s/%s" % (base, f)
             c = code(u)
             print("[远端] HTTP %-4s %s" % (c, u))
