@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-合并上游 TVBox 配置 + 直播源，生成 config.json（完整版）与 config-lite.json（精简版）。
+合并上游 TVBox 配置 + 直播源，生成三份配置：
+  config.json       完整版（含 spider jar）
+  config-lite.json  精简版（免 jar，老盒子主力）
+  config-live.json  纯直播版（0 影视站点，只要看电视时用）
 
 用法：
     python build.py              # 只合并，不探测
@@ -191,10 +194,16 @@ def main():
         }
         return cfg
 
+    # ---- 纯直播版：0 影视站点，只留 ① 自托管副本 + ③ 上游直链作冗余 ----
+    live_lives = [lite_lives[0], lite_lives[2]]
+    live_only = build([], False, live_lives)
+    live_only["parses"] = []      # 纯直播不需要解析接口，减小体积
+
     full = build(full_sites, True, full_lives)
     lite = build(lite_sites, False, lite_lives)
 
-    for name, cfg in (("config.json", full), ("config-lite.json", lite)):
+    for name, cfg in (("config.json", full), ("config-lite.json", lite),
+                      ("config-live.json", live_only)):
         with open(os.path.join(HERE, name), "w", encoding="utf-8") as f:
             json.dump(cfg, f, ensure_ascii=False, indent=1)
         print("写出 %s: %d 站点 / %d 直播源" % (name, len(cfg["sites"]), len(cfg["lives"])))

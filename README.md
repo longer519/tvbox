@@ -27,9 +27,20 @@
 | 用途 | 地址 |
 |---|---|
 | **主力（老盒子首选）** | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config-lite.json` |
+| **纯看电视（0 影视站点）** | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config-live.json` |
 | 完整版（含 spider 站点） | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config.json` |
 | 备用通道（TLS1.2） | `https://gh-proxy.com/https://raw.githubusercontent.com/longer519/tvbox/main/config.json` |
 | 回滚（换历史 tag） | 把地址里的 `@main` 改成 `@v20261019-0700` 这类历史 tag |
+
+三档怎么选：
+
+- **`config-lite.json`** —— 影视 + 直播都要，20 个免 jar 站点，最通用
+- **`config-live.json`** —— 只看电视，0 个影视站点、只有 2 组直播源，界面最干净
+- **`config.json`** —— 站点最多（含 spider 型），性能好的设备用
+
+> 少数 TVBox 版本在 `sites` 为空时首页会显示「暂无数据」或空白，**直播页仍可正常用**。
+> 若首页异常，换回 `config-lite.json` 即可。`config-live.json` 里的 ① 与 ③ 本质是同一上游源
+> （自托管副本 + 上游直链），只是互为冗余，不是两套不同内容。
 
 **为什么主力走 jsDelivr**：实测 jsDelivr 在 TLS 1.0/1.1 下仍可握手，而 raw.githubusercontent.com 强制 TLS 1.2 —— Android 4.4 有 TLS1.2 但默认不启用，老盒子直连 raw 极易握手失败。jsDelivr 同时在国内有节点。
 
@@ -41,13 +52,14 @@
 
 | 文件 | 说明 |
 |---|---|
-| `config.json` | 完整版：61 站点（含 spider 型）+ 5 组直播 |
+| `config.json` | 完整版：约 56 站点（含 spider 型）+ 5 组直播 |
 | `config-lite.json` | 精简版：**20 个免 jar 站点 + 3 组直播**，老盒子主力 |
-| `live/live.txt` | 直播主源，319 频道（实测 8/8 可连） |
+| `config-live.json` | 纯直播版：**0 影视站点 + 2 组直播**，491 字节 |
+| `live/live.txt` | 直播主源，319 频道（实测 7/8 可连） |
 | `live/ccsh_lite.txt` | 直播扩充，1709 频道（部分为运营商内网源，跨网不可用） |
 | `live/bbxx365.txt` | iptv365 全量，2 万频道（体量大，仅完整版引用） |
 | `jar/pg.jar` | 自托管 spider，11.7 MB，md5 已写入配置 |
-| `build.py` | 合并/探活/生成两份配置 |
+| `build.py` | 合并/探活/生成三份配置 |
 | `verify.py` | 验证 JSON、spider md5、直播源抽样 |
 | `probe_cache.json` | 上次站点探活结果 |
 

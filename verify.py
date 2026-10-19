@@ -100,7 +100,8 @@ def main():
     print("仓库: %s\n" % repo)
 
     ok_all = True
-    for f in ("config.json", "config-lite.json"):
+    spider_done = False
+    for f in ("config.json", "config-lite.json", "config-live.json"):
         p = os.path.join(HERE, f)
         if not os.path.exists(p):
             print("[缺失]", f)
@@ -115,23 +116,24 @@ def main():
             ok_all = False
             continue
 
+        # 三份配置共用同一个 spider，验一次即可，但不能因此跳过其余配置的 JSON 校验
         sp = (cfg.get("spider") or "").split(";")
-        if len(sp) >= 3 and sp[0].startswith("http"):
+        if (not spider_done) and len(sp) >= 3 and sp[0].startswith("http"):
+            spider_done = True
             url, md5_cfg = sp[0], sp[2].strip().lower()
             if "USER/REPO" in url:
                 print("      spider: 跳过（repo.conf 还是占位符 USER/REPO，填真实仓库后再验）")
-                break
-            c = code(url, 40)
-            print("      spider: HTTP %s  %s" % (c, url))
-            if c == 200:
-                got, size = md5_url(url)
-                match = (got == md5_cfg)
-                print("      spider md5: %s | 配置声明 %s | %s（%.1f MB）"
-                      % (got, md5_cfg, "一致" if match else "不一致", size / 1048576))
-                ok_all &= match
             else:
-                ok_all = False
-            break   # 两份配置的 spider 相同，验一次即可
+                c = code(url, 40)
+                print("      spider: HTTP %s  %s" % (c, url))
+                if c == 200:
+                    got, size = md5_url(url)
+                    match = (got == md5_cfg)
+                    print("      spider md5: %s | 配置声明 %s | %s（%.1f MB）"
+                          % (got, md5_cfg, "一致" if match else "不一致", size / 1048576))
+                    ok_all &= match
+                else:
+                    ok_all = False
 
     print()
     for f in ("live/live.txt", "live/ccsh_lite.txt", "live/bbxx365.txt"):
@@ -144,7 +146,8 @@ def main():
     if remote:
         print()
         base = "https://cdn.jsdelivr.net/gh/%s@main" % repo
-        for f in ("config.json", "config-lite.json", "live/live.txt", "live/ccsh_lite.txt"):
+        for f in ("config.json", "config-lite.json", "config-live.json",
+                  "live/live.txt", "live/ccsh_lite.txt"):
             u = "%s/%s" % (base, f)
             c = code(u)
             print("[远端] HTTP %-4s %s" % (c, u))

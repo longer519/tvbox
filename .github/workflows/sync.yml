@@ -54,6 +54,8 @@ jobs:
           python3 -c "import json;[json.load(open(f,encoding='utf-8')) for f in ['config.json','config-lite.json']]"
           jq -e '.sites | length > 0' config.json > /dev/null
           jq -e '.sites | length > 0' config-lite.json > /dev/null
+          # 纯直播版本来就是 0 站点，只校验 lives 与 JSON 合法性
+          jq -e '.lives | length > 1' config-live.json > /dev/null
 
       - name: 提交并打 tag
         run: |
@@ -71,7 +73,7 @@ jobs:
 
       - name: 刷新 jsDelivr 缓存
         run: |
-          for f in config.json config-lite.json live/live.txt live/ccsh_lite.txt; do
+          for f in config.json config-lite.json config-live.json live/live.txt live/ccsh_lite.txt; do
             curl -fsS -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/$f" || true
           done
 
