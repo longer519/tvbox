@@ -19,6 +19,14 @@
    "filterable": 1
   },
   {
+   "key": "lebozy.com",
+   "name": "💕乐播(直连)",
+   "type": 1,
+   "api": "https://lbapi9.com/api.php/provide/vod/?ac=list",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
    "key": "senlinzy.com",
    "name": "♥森林(直连)",
    "type": 1,
@@ -59,10 +67,34 @@
    "filterable": 1
   },
   {
+   "key": "madouse.la",
+   "name": "★魔法(直连)",
+   "type": 1,
+   "api": "http://madouse.la/api.php/provide/vod/",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
    "key": "jingpinx.com",
    "name": "★精品下(直连)",
    "type": 1,
    "api": "http://www.jingpinx.com/api.php/provide/vod/?ac=list",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
+   "key": "semaozy.com",
+   "name": "色猫(FQ)",
+   "type": 1,
+   "api": "https://caiji.semaozy.net/inc/apijson_vod.php",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
+   "key": "lajiaozy.com",
+   "name": "辣椒(FQ)",
+   "type": 1,
+   "api": "https://apilj.com/api.php/provide/vod/at/json/?ac=list",
    "searchable": 1,
    "filterable": 1
   },
@@ -91,10 +123,55 @@
    "changeable": 1
   },
   {
+   "key": "玉兔资源",
+   "name": "玉兔资源",
+   "type": 0,
+   "api": "https://apiyutu.com/api.php/provide/vod/at/xml/",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.333
+   },
+   "quickSearch": 1
+  },
+  {
    "key": "wmcj8.com",
    "name": "成人05",
    "type": 0,
    "api": "http://wmcj8.com/inc/sapi.php",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
+  },
+  {
+   "key": "apilj.com",
+   "name": "成人06",
+   "type": 1,
+   "api": "http://apilj.com/api.php/provide/vod/at/json/",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
+  },
+  {
+   "key": "91md.me",
+   "name": "91麻豆",
+   "type": 1,
+   "api": "http://91md.me/api.php/provide/vod/",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
+  },
+  {
+   "key": "www.pgxdy.com",
+   "name": "黄AV",
+   "type": 0,
+   "api": "https://www.pgxdy.com/api/xml.php",
    "searchable": 1,
    "style": {
     "type": "rect",
@@ -179,10 +256,41 @@
    }
   },
   {
+   "key": "shayuapi.com",
+   "name": "成人24",
+   "type": 1,
+   "api": "https://shayuapi.com/api.php/provide/vod/",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
+  },
+  {
+   "key": "lbapi9.com",
+   "name": "成人26",
+   "type": 1,
+   "api": "https://lbapi9.com/api.php/provide/vod/",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
+  },
+  {
    "key": "csp_SNzy",
    "name": "🐉┃索尼┃高清",
    "type": 1,
    "api": "https://suoniapi.com/api.php/provide/vod/?ac=list",
+   "searchable": 1,
+   "quickSearch": 1,
+   "filterable": 1
+  },
+  {
+   "key": "csp_非凡资源",
+   "name": "🥗┃非凡┃资源",
+   "type": 1,
+   "api": "http://ffzy1.tv/api.php/provide/vod/",
    "searchable": 1,
    "quickSearch": 1,
    "filterable": 1
@@ -203,6 +311,14 @@
    "api": "https://www.feisuzyapi.com/api.php/provide/vod/?ac=list",
    "searchable": 1,
    "filterable": 0
+  },
+  {
+   "key": "虎牙",
+   "name": "🐯虎牙采集",
+   "type": 1,
+   "api": "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8",
+   "searchable": 1,
+   "quickSearch": 1
   },
   {
    "key": "火狐",
