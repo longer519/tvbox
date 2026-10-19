@@ -98,19 +98,10 @@ jobs:
         run: |
           set -uo pipefail
           python3 build.py --probe --lite-max 20
-          python3 -c "import json;[json.load(open(f,encoding='utf-8')) for f in ['config.json','config-lite.json','config-live.json']]"
-
-          # (.sites // []) 防止上游缺字段时 jq 以 exit 5 直接崩（2026-10-19 那次失败就是这个）
-          jq -e '(.sites // [] | length) > 0' config.json > /dev/null
-          jq -e '(.sites // [] | length) > 0' config-lite.json > /dev/null
-          jq -e '(.lives // [] | length) > 1' config-live.json > /dev/null
-
-          echo "### 生成结果" >> "$GITHUB_STEP_SUMMARY"
-          echo "| 文件 | 站点 | 直播组 |" >> "$GITHUB_STEP_SUMMARY"
-          echo "|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
-          for f in config.json config-lite.json config-live.json; do
-            echo "| $f | $(jq '.sites|length' $f) | $(jq '.lives|length' $f) |" >> "$GITHUB_STEP_SUMMARY"
-          done
+          # 校验交给 python：jq -e 在表达式为 false 时返回 1，
+          # 2026-10-20 那次失败就是 config-live.json 直播源从 2 组改成 1 组、
+          # 而校验仍写 `lives > 1` → `1 > 1` 为 false → 整步被判红（run #5）
+          python3 .github/scripts/check_configs.py
 
       - name: 提交并打 tag
         run: |
