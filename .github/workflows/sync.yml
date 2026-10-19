@@ -115,6 +115,23 @@ jobs:
             git push
             git tag "v$(date -u +%Y%m%d-%H%M)"
             git push --tags
+
+            # 可选：把同一份内容再推一份到私有备份仓库。
+            # 需要先在 Settings → Secrets and variables → Actions 里加一个 BACKUP_PAT
+            # （classic token，勾 repo 权限即可；free 账号的私有 Actions 分钟数有限，
+            #   所以备份仓库那边已把 .github/workflows 改名成 workflows-off，不跑任务）。
+            # 没配这个 secret 时整段跳过，不影响主流程。
+            if [ -n "${{ secrets.BACKUP_PAT }}" ]; then
+              BURL="https://x-access-token:${{ secrets.BACKUP_PAT }}@github.com/longer519/tvbox-config.git"
+              git remote add backup "$BURL" 2>/dev/null || git remote set-url backup "$BURL"
+              if git push backup main --tags; then
+                echo "- ✅ 已同步到私有备份仓库 \`longer519/tvbox-config\`" >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "::warning::推送到私有备份仓库失败（不影响主仓库）"
+                echo "- ⚠️ 推送到私有备份仓库失败" >> "$GITHUB_STEP_SUMMARY"
+              fi
+              git remote remove backup
+            fi
           fi
 
       # @main 是分支引用，jsDelivr 各边缘节点独立失效，purge 后仍可能短暂陈旧（最长 12h 自愈）。
