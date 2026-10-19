@@ -22,13 +22,13 @@
 
 ## 二、配置地址（填进「设置 → 配置地址」）
 
-把 `<USER>/<REPO>` 换成你自己的 GitHub 用户名/仓库名。
+把 `longer519/tvbox` 换成你自己的 GitHub 用户名/仓库名。
 
 | 用途 | 地址 |
 |---|---|
-| **主力（老盒子首选）** | `https://cdn.jsdelivr.net/gh/<USER>/<REPO>@main/config-lite.json` |
-| 完整版（含 spider 站点） | `https://cdn.jsdelivr.net/gh/<USER>/<REPO>@main/config.json` |
-| 备用通道（TLS1.2） | `https://gh-proxy.com/https://raw.githubusercontent.com/<USER>/<REPO>/main/config.json` |
+| **主力（老盒子首选）** | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config-lite.json` |
+| 完整版（含 spider 站点） | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config.json` |
+| 备用通道（TLS1.2） | `https://gh-proxy.com/https://raw.githubusercontent.com/longer519/tvbox/main/config.json` |
 | 回滚（换历史 tag） | 把地址里的 `@main` 改成 `@v20261019-0700` 这类历史 tag |
 
 **为什么主力走 jsDelivr**：实测 jsDelivr 在 TLS 1.0/1.1 下仍可握手，而 raw.githubusercontent.com 强制 TLS 1.2 —— Android 4.4 有 TLS1.2 但默认不启用，老盒子直连 raw 极易握手失败。jsDelivr 同时在国内有节点。
@@ -71,7 +71,7 @@
 ```bash
 # 1. GitHub 网页新建「公开」仓库（jsDelivr 要求公开），记下 用户名/仓库名
 # 2. 写入仓库坐标
-echo "用户名/仓库名" > repo.conf
+echo "longer519/tvbox" > repo.conf
 
 # 3. 拉取上游 + 生成配置
 python build.py --probe --lite-max 20
@@ -83,7 +83,7 @@ python verify.py
 git init && git add -A
 git commit -m "init tvbox config"
 git branch -M main
-git remote add origin https://github.com/用户名/仓库名.git
+git remote add origin https://github.com/longer519/tvbox.git
 git push -u origin main
 git tag v$(date -u +%Y%m%d-%H%M) && git push --tags
 

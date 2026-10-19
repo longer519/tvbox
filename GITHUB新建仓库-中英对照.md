@@ -55,7 +55,7 @@ git init
 git add -A
 git commit -m "init tvbox config"
 git branch -M main
-git remote add origin https://github.com/<USER>/<REPO>.git
+git remote add origin https://github.com/longer519/tvbox.git
 git push -u origin main
 git tag v20261019-0800 && git push --tags
 ```
@@ -67,5 +67,5 @@ git tag v20261019-0800 && git push --tags
 ## 最终盒子里的地址
 
 ```
-https://cdn.jsdelivr.net/gh/<USER>/<REPO>@main/config-lite.json
+https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config-lite.json
 ```
