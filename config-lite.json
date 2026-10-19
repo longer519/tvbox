@@ -3,6 +3,14 @@
  "wallpaper": "https://cdn.jsdelivr.net/gh/qist/tvbox@master/favicon.ico",
  "sites": [
   {
+   "key": "155zy.com",
+   "name": "♥155(直连)",
+   "type": 1,
+   "api": "https://155api.com/api.php/provide/vod/?ac=list",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
    "key": "jkunzy.com",
    "name": "💕jkun(直连)",
    "type": 1,
@@ -27,6 +35,14 @@
    "filterable": 1
   },
   {
+   "key": "didizy.com",
+   "name": "♥滴滴(直连)",
+   "type": 1,
+   "api": "https://api.ddapi.cc/api.php/provide/vod/?ac=list",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
    "key": "vnzyz.com",
    "name": "💕越南(直连)",
    "type": 1,
@@ -35,10 +51,26 @@
    "filterable": 1
   },
   {
+   "key": "laosebizy.com",
+   "name": "💕老色逼(直连)",
+   "type": 1,
+   "api": "https://apilsbzy1.com/api.php/provide/vod/?ac=list",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
    "key": "fhapi9.com",
    "name": "★废柴(直连)",
    "type": 1,
    "api": "http://fhapi9.com/api.php/provide/vod/?ac=list",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
+   "key": "madouse.la",
+   "name": "★魔法(直连)",
+   "type": 1,
+   "api": "http://madouse.la/api.php/provide/vod/",
    "searchable": 1,
    "filterable": 1
   },
@@ -55,6 +87,14 @@
    "name": "色猫(FQ)",
    "type": 1,
    "api": "https://caiji.semaozy.net/inc/apijson_vod.php",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
+   "key": "lajiaozy.com",
+   "name": "辣椒(FQ)",
+   "type": 1,
+   "api": "https://apilj.com/api.php/provide/vod/at/json/?ac=list",
    "searchable": 1,
    "filterable": 1
   },
@@ -83,6 +123,18 @@
    "changeable": 1
   },
   {
+   "key": "玉兔资源",
+   "name": "玉兔资源",
+   "type": 0,
+   "api": "https://apiyutu.com/api.php/provide/vod/at/xml/",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.333
+   },
+   "quickSearch": 1
+  },
+  {
    "key": "wmcj8.com",
    "name": "成人05",
    "type": 0,
@@ -94,76 +146,10 @@
    }
   },
   {
-   "key": "dadiapi.com",
-   "name": "成人09",
-   "type": 0,
-   "api": "http://dadiapi.com/api.php",
-   "searchable": 1,
-   "style": {
-    "type": "rect",
-    "ratio": 1.33
-   }
-  },
-  {
-   "key": "api.11bat.com",
-   "name": "成人15",
-   "type": 0,
-   "api": "http://api.11bat.com/api.php/provide/vod/at/xml",
-   "searchable": 1,
-   "style": {
-    "type": "rect",
-    "ratio": 1.33
-   }
-  },
-  {
-   "key": "gdlsp.com",
-   "name": "香奶儿",
-   "type": 0,
-   "api": "https://www.gdlsp.com/api/xml.php",
-   "searchable": 1,
-   "style": {
-    "type": "rect",
-    "ratio": 1.33
-   }
-  },
-  {
-   "key": "msnii.com",
-   "name": "美少女",
-   "type": 0,
-   "api": "https://www.msnii.com/api/xml.php",
-   "searchable": 1,
-   "style": {
-    "type": "rect",
-    "ratio": 1.33
-   }
-  },
-  {
-   "key": "xrbsp.com",
-   "name": "淫水机",
-   "type": 0,
-   "api": "https://www.xrbsp.com/api/xml.php",
-   "searchable": 1,
-   "style": {
-    "type": "rect",
-    "ratio": 1.33
-   }
-  },
-  {
-   "key": "kxgav.com",
-   "name": "白嫖",
-   "type": 0,
-   "api": "https://www.kxgav.com/api/xml.php",
-   "searchable": 1,
-   "style": {
-    "type": "rect",
-    "ratio": 1.33
-   }
-  },
-  {
-   "key": "kkzy.me",
-   "name": "成人23",
+   "key": "apilj.com",
+   "name": "成人06",
    "type": 1,
-   "api": "https://kkzy.me/api.php/provide/vod/",
+   "api": "http://apilj.com/api.php/provide/vod/at/json/",
    "searchable": 1,
    "style": {
     "type": "rect",
@@ -171,22 +157,26 @@
    }
   },
   {
-   "key": "csp_SNzy",
-   "name": "🐉┃索尼┃高清",
+   "key": "91md.me",
+   "name": "91麻豆",
    "type": 1,
-   "api": "https://suoniapi.com/api.php/provide/vod/?ac=list",
+   "api": "http://91md.me/api.php/provide/vod/",
    "searchable": 1,
-   "quickSearch": 1,
-   "filterable": 1
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
   },
   {
-   "key": "量子资源",
-   "name": "🥑┃量子┃资源",
-   "type": 1,
-   "api": "https://lzizy1.com/api.php/provide/vod/",
+   "key": "www.pgxdy.com",
+   "name": "黄AV",
+   "type": 0,
+   "api": "https://www.pgxdy.com/api/xml.php",
    "searchable": 1,
-   "quickSearch": 1,
-   "filterable": 0
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
   }
  ],
  "parses": [
