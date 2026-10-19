@@ -46,6 +46,20 @@
 
 **为什么 spider 走 gh-proxy**：jsDelivr 会屏蔽 `.jar`（返回 403），所以 `config.json` 里的 spider 字段写的是指向 gh-proxy 的**绝对 URL**，不走 jsDelivr。`config-lite.json` 不依赖 jar，最稳。
 
+### 如果盒子里的内容比网站上旧（jsDelivr 分支缓存）
+
+`@main` 是**分支引用**，jsDelivr 各边缘节点独立失效，刚同步完的头几分钟到几小时里，个别节点仍可能吐上一版内容（最长 12 小时会自愈）。三种处理办法：
+
+| 办法 | 地址 | 特点 |
+|---|---|---|
+| **① 等** | 不变 | 下一两次打开配置时大概率已刷新；workflow 每次同步都会 purge + 校验，会加速自愈 |
+| **② 换最新 tag** | `https://cdn.jsdelivr.net/gh/longer519/tvbox@v20261019-1320/config-lite.json` | tag 指向不可变提交，**内容永远新鲜**；代价是每次同步 tag 会变，需要改地址 |
+| **③ 换 gh-proxy 直连 raw** | `https://gh-proxy.com/https://raw.githubusercontent.com/longer519/tvbox/main/config-lite.json` | 永远新鲜、无缓存；代价是依赖第三方代理，且要求设备支持 TLS 1.2 |
+
+日常保持 `@main` 不动即可 —— 只有急着看新内容时才临时换成 ② 或 ③，下次同步后再换回来。
+
+> 2026-10-19 20:20 那次同步后实测：`@main` 有约 20 分钟陈旧期，purge 后两个配置文件已恢复一致，直播源文件随后自愈。
+
 ---
 
 ## 三、文件内容
@@ -72,7 +86,7 @@
 2. 拉取三个直播源，中文频道数校验失败则回滚上一版
 3. `python3 build.py --probe --lite-max 20`：探活并剔除失效站点
 4. 提交 + 打 tag `vYYYYMMDD-HHMM`（用于回滚）
-5. `POST https://purge.jsdelivr.net/...` 刷新 jsDelivr 缓存
+5. `POST https://purge.jsdelivr.net/...` 刷新 jsDelivr 缓存，**并用 raw 与 CDN 的 md5 比对校验**，不一致则 30 秒后重试（最多 5 轮），仍不一致只告警并给出 tag 兜底地址
 
 **每个上游文件都按 raw → gh-proxy → jsDelivr 的顺序回退**（`.github/scripts/fetch.sh`），
 逐个打印 HTTP 码与体积，全部失败时保留仓库旧版，不会提交空壳。

@@ -126,11 +126,49 @@ jobs:
             git push --tags
           fi
 
-      - name: 刷新 jsDelivr 缓存
+      # @main 是分支引用，jsDelivr 各边缘节点独立失效，purge 后仍可能短暂陈旧（最长 12h 自愈）。
+      # 所以 purge 之后必须校验：raw 与 jsDelivr 逐字节一致才算刷新成功，不一致就再来一轮。
+      - name: 刷新 jsDelivr 缓存（purge + 校验 + 重试）
         run: |
-          for f in config.json config-lite.json config-live.json live/live.txt live/ccsh_lite.txt; do
-            curl -fsS -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/$f" || true
+          set -uo pipefail
+          REPO=${{ github.repository }}
+          FILES="config.json config-lite.json config-live.json live/live.txt live/ccsh_lite.txt live/bbxx365.txt"
+          # fetch-depth:1 不会拉历史 tag，但本步骤刚打过的新 tag 在本地是可见的
+          TAG=$(git tag --sort=-creatordate | head -1)
+          [ -n "$TAG" ] || TAG=main
+
+          purge() {
+            for f in $FILES; do
+              curl -fsS -X POST "https://purge.jsdelivr.net/gh/$REPO@main/$f" >/dev/null 2>&1 || true
+            done
+          }
+          # raw 是真值；CDN 侧与它不一致即视为陈旧。raw 取不到时也按陈旧处理（宁可多重几轮）
+          same() {
+            a=$(curl -fsSL --max-time 60 "https://raw.githubusercontent.com/$REPO/main/$1" | md5sum | cut -d' ' -f1)
+            b=$(curl -fsSL --max-time 60 "https://cdn.jsdelivr.net/gh/$REPO@main/$1" | md5sum | cut -d' ' -f1)
+            [ -n "$a" ] && [ "$a" = "$b" ]
+          }
+
+          echo "#### jsDelivr 缓存刷新" >> "$GITHUB_STEP_SUMMARY"
+          bad=""
+          for i in 1 2 3 4 5; do
+            purge; bad=""
+            for f in $FILES; do
+              same "$f" || bad="$bad \`$f\`"
+            done
+            if [ -z "$bad" ]; then
+              echo "- ✅ 第 $i 轮后 6 个文件与 raw 全部一致" >> "$GITHUB_STEP_SUMMARY"
+              break
+            fi
+            echo "- ⚠️ 第 $i 轮后仍陈旧：$bad（30s 后重试）" >> "$GITHUB_STEP_SUMMARY"
+            [ "$i" = "5" ] || sleep 30
           done
+
+          if [ -n "$bad" ]; then
+            # CDN 慢性不该把整个 sync 判红：只告警 + 给出立即可用的 tag 兜底地址
+            echo "::warning::jsDelivr 分支缓存仍有陈旧节点，最长 12h 自愈；急需可用 https://cdn.jsdelivr.net/gh/$REPO@$TAG/config-lite.json"
+            echo "- ⚠️ 仍有陈旧节点（最长 12h 自愈）。立即可用：\`https://cdn.jsdelivr.net/gh/$REPO@$TAG/config-lite.json\`" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: 失败告警（可选，配了 SERVERCHAN_KEY 才生效）
         if: failure()
