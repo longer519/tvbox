@@ -74,6 +74,10 @@
 4. 提交 + 打 tag `vYYYYMMDD-HHMM`（用于回滚）
 5. `POST https://purge.jsdelivr.net/...` 刷新 jsDelivr 缓存
 
+**每个上游文件都按 raw → gh-proxy → jsDelivr 的顺序回退**（`.github/scripts/fetch.sh`），
+逐个打印 HTTP 码与体积，全部失败时保留仓库旧版，不会提交空壳。
+2026-10-19 首跑失败就是 jsDelivr 对 GitHub 机房 IP 返回错误 JSON 导致的，已如此修正。
+
 上游摘除或返回空壳时不会提交坏版本 —— 校验失败即保留上一版。
 
 ---

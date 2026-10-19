@@ -5,57 +5,99 @@ on:
     - cron: '0 */6 * * *'      # UTC，即北京时间 8/14/20/2 点
   workflow_dispatch:
 
+# 说明：本 workflow 运行在 GitHub 自己的服务器上，与本地网络/梯子无关。
+# 每个上游文件都按 raw.githubusercontent.com → gh-proxy → jsDelivr 的顺序尝试，
+# 全部失败则保留仓库里的旧文件，不会提交空壳配置。
+
 jobs:
   sync:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
 
       - name: 拉取上游影视配置
         run: |
-          set -e
-          curl -fsSL --retry 3 --max-time 60 \
-            "https://cdn.jsdelivr.net/gh/qist/tvbox@master/99188.json" -o /tmp/base.json
-          curl -fsSL --retry 3 --max-time 60 \
-            "https://cdn.jsdelivr.net/gh/liu673cn/box@main/m.json" -o /tmp/extra.json
-          # 校验：解析失败或站点过少就中断，保留上一版
-          jq -e '.sites | length > 10' /tmp/base.json > /dev/null
-          jq -e '.sites | length > 10' /tmp/extra.json > /dev/null
-          cp /tmp/base.json upstream_99188.json
-          cp /tmp/extra.json upstream_m.json
+          set -uo pipefail
+          source .github/scripts/fetch.sh
+          RAW=https://raw.githubusercontent.com
+          PROXY=https://gh-proxy.com/
+          CDN=https://cdn.jsdelivr.net/gh
+
+          fetch upstream_99188.json 1000 '(.sites // [] | length) > 10' \
+            "$RAW/qist/tvbox/master/99188.json" \
+            "${PROXY}$RAW/qist/tvbox/master/99188.json" \
+            "$CDN/qist/tvbox@master/99188.json" \
+            || exit 1
+
+          fetch upstream_m.json 1000 '(.sites // [] | length) > 10' \
+            "$RAW/liu673cn/box/main/m.json" \
+            "${PROXY}$RAW/liu673cn/box/main/m.json" \
+            "$CDN/liu673cn/box@main/m.json" \
+            || exit 1
 
       - name: 拉取直播源
         run: |
-          set -e
-          curl -fsSL --retry 3 --max-time 60 \
-            "https://cdn.jsdelivr.net/gh/Supprise0901/TVBox_live@main/live.txt" -o live/live.txt
-          curl -fsSL --retry 3 --max-time 60 \
-            "https://cdn.jsdelivr.net/gh/CCSH/IPTV@HEAD/live_lite.txt" -o live/ccsh_lite.txt
-          curl -fsSL --retry 3 --max-time 120 \
-            "https://cdn.jsdelivr.net/gh/kimwang1978/collect-txt@main/bbxx365.txt" -o live/bbxx365.txt
-          # 中文频道数校验，防止上游返回空壳
-          test $(grep -c "CCTV" live/ccsh_lite.txt) -gt 0 || (echo "ccsh_lite 异常，回滚" && git checkout -- live/ccsh_lite.txt)
-          test $(wc -l < live/live.txt) -gt 100 || (echo "live.txt 异常，回滚" && git checkout -- live/live.txt)
+          set -uo pipefail
+          source .github/scripts/fetch.sh
+          RAW=https://raw.githubusercontent.com
+          PROXY=https://gh-proxy.com/
+          CDN=https://cdn.jsdelivr.net/gh
 
-      - name: 确保 spider jar 存在（仅首次或缺失时下载）
+          fetch live/live.txt 20000 - \
+            "$CDN/Supprise0901/TVBox_live@main/live.txt" \
+            "$RAW/Supprise0901/TVBox_live/main/live.txt" \
+            "${PROXY}$RAW/Supprise0901/TVBox_live/main/live.txt" || true
+
+          fetch live/ccsh_lite.txt 20000 - \
+            "$CDN/CCSH/IPTV@main/live_lite.txt" \
+            "$RAW/CCSH/IPTV/main/live_lite.txt" \
+            "${PROXY}$RAW/CCSH/IPTV/main/live_lite.txt" || true
+
+          fetch live/bbxx365.txt 100000 - \
+            "$CDN/kimwang1978/collect-txt@main/bbxx365.txt" \
+            "$RAW/kimwang1978/collect-txt/main/bbxx365.txt" \
+            "${PROXY}$RAW/kimwang1978/collect-txt/main/bbxx365.txt" || true
+
+          # 内容合理性检查，只告警不中断（真正的好坏由 build.py 的探活决定）
+          grep -q "CCTV" live/ccsh_lite.txt 2>/dev/null \
+            || echo "::warning::ccsh_lite.txt 未见 CCTV 频道"
+          test "$(wc -l < live/live.txt)" -gt 100 \
+            || echo "::warning::live.txt 行数偏少"
+
+      - name: 确保 spider jar 存在（仅缺失时下载）
         run: |
-          if [ ! -s jar/pg.jar ]; then
-            curl -fsSL --retry 3 --max-time 180 \
-              "https://cdn.jsdelivr.net/gh/qist/tvbox@master/jar/pg23a94bb_upgraded.jar" -o jar/pg.jar
+          set -uo pipefail
+          source .github/scripts/fetch.sh
+          if [ -s jar/pg.jar ]; then
+            echo "jar/pg.jar 已存在（$(wc -c < jar/pg.jar) 字节），跳过下载"
+          else
+            fetch jar/pg.jar 1000000 - \
+              "https://raw.githubusercontent.com/qist/tvbox/master/jar/pg23a94bb_upgraded.jar" \
+              "https://gh-proxy.com/https://raw.githubusercontent.com/qist/tvbox/master/jar/pg23a94bb_upgraded.jar" \
+              || exit 1
           fi
 
       - name: 生成配置
         run: |
+          set -uo pipefail
           python3 build.py --probe --lite-max 20
-          python3 -c "import json;[json.load(open(f,encoding='utf-8')) for f in ['config.json','config-lite.json']]"
-          jq -e '.sites | length > 0' config.json > /dev/null
-          jq -e '.sites | length > 0' config-lite.json > /dev/null
-          # 纯直播版本来就是 0 站点，只校验 lives 与 JSON 合法性
-          jq -e '.lives | length > 1' config-live.json > /dev/null
+          python3 -c "import json;[json.load(open(f,encoding='utf-8')) for f in ['config.json','config-lite.json','config-live.json']]"
+
+          # (.sites // []) 防止上游缺字段时 jq 以 exit 5 直接崩（2026-10-19 那次失败就是这个）
+          jq -e '(.sites // [] | length) > 0' config.json > /dev/null
+          jq -e '(.sites // [] | length) > 0' config-lite.json > /dev/null
+          jq -e '(.lives // [] | length) > 1' config-live.json > /dev/null
+
+          echo "### 生成结果" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 文件 | 站点 | 直播组 |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          for f in config.json config-lite.json config-live.json; do
+            echo "| $f | $(jq '.sites|length' $f) | $(jq '.lives|length' $f) |" >> "$GITHUB_STEP_SUMMARY"
+          done
 
       - name: 提交并打 tag
         run: |
