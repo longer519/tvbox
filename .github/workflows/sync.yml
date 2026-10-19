@@ -1,0 +1,83 @@
+name: sync
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'      # UTC，即北京时间 8/14/20/2 点
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 拉取上游影视配置
+        run: |
+          set -e
+          curl -fsSL --retry 3 --max-time 60 \
+            "https://cdn.jsdelivr.net/gh/qist/tvbox@master/99188.json" -o /tmp/base.json
+          curl -fsSL --retry 3 --max-time 60 \
+            "https://cdn.jsdelivr.net/gh/liu673cn/box@main/m.json" -o /tmp/extra.json
+          # 校验：解析失败或站点过少就中断，保留上一版
+          jq -e '.sites | length > 10' /tmp/base.json > /dev/null
+          jq -e '.sites | length > 10' /tmp/extra.json > /dev/null
+          cp /tmp/base.json upstream_99188.json
+          cp /tmp/extra.json upstream_m.json
+
+      - name: 拉取直播源
+        run: |
+          set -e
+          curl -fsSL --retry 3 --max-time 60 \
+            "https://cdn.jsdelivr.net/gh/Supprise0901/TVBox_live@main/live.txt" -o live/live.txt
+          curl -fsSL --retry 3 --max-time 60 \
+            "https://cdn.jsdelivr.net/gh/CCSH/IPTV@HEAD/live_lite.txt" -o live/ccsh_lite.txt
+          curl -fsSL --retry 3 --max-time 120 \
+            "https://cdn.jsdelivr.net/gh/kimwang1978/collect-txt@main/bbxx365.txt" -o live/bbxx365.txt
+          # 中文频道数校验，防止上游返回空壳
+          test $(grep -c "CCTV" live/ccsh_lite.txt) -gt 0 || (echo "ccsh_lite 异常，回滚" && git checkout -- live/ccsh_lite.txt)
+          test $(wc -l < live/live.txt) -gt 100 || (echo "live.txt 异常，回滚" && git checkout -- live/live.txt)
+
+      - name: 确保 spider jar 存在（仅首次或缺失时下载）
+        run: |
+          if [ ! -s jar/pg.jar ]; then
+            curl -fsSL --retry 3 --max-time 180 \
+              "https://cdn.jsdelivr.net/gh/qist/tvbox@master/jar/pg23a94bb_upgraded.jar" -o jar/pg.jar
+          fi
+
+      - name: 生成配置
+        run: |
+          python3 build.py --probe --lite-max 20
+          python3 -c "import json;[json.load(open(f,encoding='utf-8')) for f in ['config.json','config-lite.json']]"
+          jq -e '.sites | length > 0' config.json > /dev/null
+          jq -e '.sites | length > 0' config-lite.json > /dev/null
+
+      - name: 提交并打 tag
+        run: |
+          git config user.name "tvbox-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "无变化，跳过提交"
+          else
+            git commit -m "sync $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+            git tag "v$(date -u +%Y%m%d-%H%M)"
+            git push --tags
+          fi
+
+      - name: 刷新 jsDelivr 缓存
+        run: |
+          for f in config.json config-lite.json live/live.txt live/ccsh_lite.txt; do
+            curl -fsS -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/$f" || true
+          done
+
+      - name: 失败告警（可选，配了 SERVERCHAN_KEY 才生效）
+        if: failure()
+        run: |
+          if [ -n "${{ secrets.SERVERCHAN_KEY }}" ]; then
+            curl -fsS "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send?title=TVBox同步失败" || true
+          fi
