@@ -5,16 +5,9 @@
  "parses": [],
  "lives": [
   {
-   "name": "① 直播·稳定(319)",
+   "name": "① 直播·稳定（live.txt 自托管）",
    "type": 0,
    "url": "https://cdn.jsdelivr.net/gh/longer519/tvbox@main/live/live.txt",
-   "epg": "",
-   "logo": ""
-  },
-  {
-   "name": "③ 备用·上游直链",
-   "type": 0,
-   "url": "https://cdn.jsdelivr.net/gh/Supprise0901/TVBox_live@main/live.txt",
    "epg": "",
    "logo": ""
   }

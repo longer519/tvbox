@@ -173,7 +173,7 @@ def main():
         return JSDELIVR.format(repo=repo, ref="main", path=path)
 
     lite_lives = [
-        {"name": "① 直播·稳定(319)", "type": 0, "url": J("live/live.txt"), "epg": "", "logo": ""},
+        {"name": "① 直播·稳定（live.txt 自托管）", "type": 0, "url": J("live/live.txt"), "epg": "", "logo": ""},
         {"name": "② 直播·扩充(1709)", "type": 0, "url": J("live/ccsh_lite.txt"), "epg": "", "logo": ""},
         {"name": "③ 备用·上游直链", "type": 0,
          "url": "https://cdn.jsdelivr.net/gh/Supprise0901/TVBox_live@main/live.txt", "epg": "", "logo": ""},
@@ -194,8 +194,10 @@ def main():
         }
         return cfg
 
-    # ---- 纯直播版：0 影视站点，只留 ① 自托管副本 + ③ 上游直链作冗余 ----
-    live_lives = [lite_lives[0], lite_lives[2]]
+    # ---- 纯直播版：0 影视站点，只保留 ① live.txt 这一组（2026-10-19 用户要求）----
+    # live.txt 是自托管副本，来源 Supprise0901/TVBox_live，约 320 个中文频道（央视/卫视/地方台），
+    # 实测抽样 7-8/8 可连，是三组里最稳的；其余两组（ccsh_lite / 上游直链）不再进纯直播版。
+    live_lives = [lite_lives[0]]
     live_only = build([], False, live_lives)
     live_only["parses"] = []      # 纯直播不需要解析接口，减小体积
 

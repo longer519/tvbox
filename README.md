@@ -30,12 +30,12 @@
 | **纯看电视（0 影视站点）** | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config-live.json` |
 | 完整版（含 spider 站点） | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/config.json` |
 | 备用通道（TLS1.2） | `https://gh-proxy.com/https://raw.githubusercontent.com/longer519/tvbox/main/config.json` |
-| 回滚（换历史 tag） | 把地址里的 `@main` 改成 `@v20261019-0700` 这类历史 tag |
+| 回滚（换历史 tag） | 把地址里的 `@main` 改成 `@v20261019-1320` 这类历史 tag |
 
 三档怎么选：
 
 - **`config-lite.json`** —— 影视 + 直播都要，20 个免 jar 站点，最通用
-- **`config-live.json`** —— 只看电视，0 个影视站点、只有 2 组直播源，界面最干净
+- **`config-live.json`** —— 只看电视，0 个影视站点，**只含 1 组直播源**（`live/live.txt`，约 320 个中文频道：央视 / 卫视 / 地方台），界面最干净
 - **`config.json`** —— 站点最多（含 spider 型），性能好的设备用
 
 > 少数 TVBox 版本在 `sites` 为空时首页会显示「暂无数据」或空白，**直播页仍可正常用**。
@@ -59,6 +59,21 @@
 日常保持 `@main` 不动即可 —— 只有急着看新内容时才临时换成 ② 或 ③，下次同步后再换回来。
 
 > 2026-10-19 20:20 那次同步后实测：`@main` 有约 20 分钟陈旧期，purge 后两个配置文件已恢复一致，直播源文件随后自愈。
+
+### 直播源单独使用（不装 TVBox / 给别的播放器）
+
+`config-live.json` 里那唯一一组直播源，就是仓库里的 **`live/live.txt`**（自托管副本，上游 `Supprise0901/TVBox_live`，约 320 个中文频道，格式为 `频道名,http地址`，每 6 小时随同步自动更新）：
+
+| 通道 | 地址 | 特点 |
+|---|---|---|
+| **jsDelivr（推荐）** | `https://cdn.jsdelivr.net/gh/longer519/tvbox@main/live/live.txt` | 国内有节点，TLS1.0 也能握手；可能有几分钟缓存延迟 |
+| raw 原站 | `https://raw.githubusercontent.com/longer519/tvbox/main/live/live.txt` | 永远新鲜；要求 TLS 1.2 |
+| gh-proxy 代理 raw | `https://gh-proxy.com/https://raw.githubusercontent.com/longer519/tvbox/main/live/live.txt` | 永远新鲜；依赖第三方代理 |
+| 上游原版 | `https://cdn.jsdelivr.net/gh/Supprise0901/TVBox_live@main/live/live.txt` | 不经过本仓库，同步时差与本仓库一致 |
+
+VLC / PotPlayer / 完美解码都能直接打开这个 txt。注意 `#genre#` 是分组标记行，部分播放器需要选「播放列表 / M3U 式导入」才能识别。
+
+> 该源由上游 `Supprise0901/TVBox_live` 维护，是 TVBox 生态里最活跃的中文直播 txt 之一；2026-10-19 实测抽样 8 个频道 7–8 个可连。失效是常态，仓库每 6 小时会自动拉最新版替换，所以**不要**把这个 txt 下载到本地长期用，直接用上面的链接才会持续拿到更新。
 
 ---
 
