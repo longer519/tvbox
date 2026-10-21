@@ -256,6 +256,17 @@
    }
   },
   {
+   "key": "shayuapi.com",
+   "name": "成人24",
+   "type": 1,
+   "api": "https://shayuapi.com/api.php/provide/vod/",
+   "searchable": 1,
+   "style": {
+    "type": "rect",
+    "ratio": 1.33
+   }
+  },
+  {
    "key": "lbapi9.com",
    "name": "成人26",
    "type": 1,
