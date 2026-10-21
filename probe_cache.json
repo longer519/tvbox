@@ -28,7 +28,7 @@
  "https://www.xrbsp.com/api/xml.php": true,
  "https://www.kxgav.com/api/xml.php": true,
  "https://kkzy.me/api.php/provide/vod/": true,
- "https://shayuapi.com/api.php/provide/vod/": true,
+ "https://shayuapi.com/api.php/provide/vod/": false,
  "https://www.afasu.com/api/xml.php": false,
  "https://lbapi9.com/api.php/provide/vod/": true,
  "https://api.apilyzy.com/api.php/provide/vod/": false,
