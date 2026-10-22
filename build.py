@@ -210,6 +210,47 @@ def main():
             json.dump(cfg, f, ensure_ascii=False, indent=1)
         print("写出 %s: %d 站点 / %d 直播源" % (name, len(cfg["sites"]), len(cfg["lives"])))
 
+    # ---- 额外产出标准 M3U（live/live.m3u）----
+    # 为什么要多这一份：TVBox 的 lives 用「频道名,URL」的 txt 文本格式，
+    # 而 LibreTV / IPTV 播放器只认标准 M3U（#EXTM3U 开头），
+    # 其 tvbox-parser 明确把 .txt 直播订阅判为 nonM3uLive 直接跳过。
+    # 同一批频道、同一个上游，只是换个格式，两边都能用。
+    m3u_path = os.path.join(HERE, "live", "live.m3u")
+    n = txt_to_m3u(os.path.join(HERE, "live", "live.txt"), m3u_path)
+    if n:
+        print("写出 live/live.m3u: %d 个频道（标准 M3U 格式）" % n)
+
+
+def txt_to_m3u(src, dest):
+    """把「频道名,URL」+「#genre#」分组的 txt 转成标准 M3U。"""
+    if not os.path.exists(src):
+        return 0
+    group = ""
+    out = ["#EXTM3U"]
+    cnt = 0
+    with open(src, encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            if line.endswith(",#genre#"):
+                group = line[:-len(",#genre#")].strip()
+                continue
+            if "," not in line:
+                continue
+            name, url = line.split(",", 1)
+            name, url = name.strip(), url.strip()
+            if not url.startswith("http"):
+                continue
+            out.append('#EXTINF:-1 tvg-name="%s" group-title="%s",%s' % (name, group, name))
+            out.append(url)
+            cnt += 1
+    if cnt == 0:
+        return 0
+    with open(dest, "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(out) + "\n")
+    return cnt
+
 
 if __name__ == "__main__":
     main()

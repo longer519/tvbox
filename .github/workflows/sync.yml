@@ -140,7 +140,7 @@ jobs:
         run: |
           set -uo pipefail
           REPO=${{ github.repository }}
-          FILES="config.json config-lite.json config-live.json live/live.txt live/ccsh_lite.txt live/bbxx365.txt"
+          FILES="config.json config-lite.json config-live.json live/live.txt live/live.m3u live/ccsh_lite.txt live/bbxx365.txt"
           # fetch-depth:1 不会拉历史 tag，但本步骤刚打过的新 tag 在本地是可见的
           TAG=$(git tag --sort=-creatordate | head -1)
           [ -n "$TAG" ] || TAG=main
