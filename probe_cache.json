@@ -45,5 +45,5 @@
  "https://hhzyapi.com/api.php/provide/vod/": true,
  "https://app.bfzyapi.com/api.php/provide/vod/": false,
  "https://api.apibdzy.com/api.php/provide/vod/?ac=list": true,
- "https://mv.wogg.link/mv/vod": false
+ "https://mv.wogg.link/mv/vod": true
 }
