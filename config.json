@@ -288,14 +288,6 @@
    "filterable": 1
   },
   {
-   "key": "feisu",
-   "name": "🛰️飞速┃采集",
-   "type": 1,
-   "api": "https://www.feisuzyapi.com/api.php/provide/vod/?ac=list",
-   "searchable": 1,
-   "filterable": 0
-  },
-  {
    "key": "虎牙",
    "name": "🐯虎牙采集",
    "type": 1,

@@ -38,7 +38,7 @@
  "http://ffzy1.tv/api.php/provide/vod/": true,
  "https://lzizy1.com/api.php/provide/vod/": false,
  "https://49zy1.com/api.php/provide/vod/?ac=list": false,
- "https://www.feisuzyapi.com/api.php/provide/vod/?ac=list": true,
+ "https://www.feisuzyapi.com/api.php/provide/vod/?ac=list": false,
  "https://caiji.qhzyapi.com/api.php/provide/vod/": false,
  "https://kekezy1.com/api.php/provide/vod/?ac=list": false,
  "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8": true,
