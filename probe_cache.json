@@ -7,7 +7,7 @@
  "https://vnzyz.com/api.php/provide/vod/?ac=list": true,
  "https://apilsbzy1.com/api.php/provide/vod/?ac=list": true,
  "http://fhapi9.com/api.php/provide/vod/?ac=list": true,
- "http://madouse.la/api.php/provide/vod/": false,
+ "http://madouse.la/api.php/provide/vod/": true,
  "http://www.jingpinx.com/api.php/provide/vod/?ac=list": true,
  "https://caiji.semaozy.net/inc/apijson_vod.php": true,
  "https://apilj.com/api.php/provide/vod/at/json/?ac=list": true,
