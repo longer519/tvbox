@@ -43,7 +43,7 @@
  "https://kekezy1.com/api.php/provide/vod/?ac=list": false,
  "https://www.huyaapi.com/api.php/provide/vod/from/hym3u8": true,
  "https://hhzyapi.com/api.php/provide/vod/": true,
- "https://app.bfzyapi.com/api.php/provide/vod/": false,
+ "https://app.bfzyapi.com/api.php/provide/vod/": true,
  "https://api.apibdzy.com/api.php/provide/vod/?ac=list": true,
- "https://mv.wogg.link/mv/vod": false
+ "https://mv.wogg.link/mv/vod": true
 }
