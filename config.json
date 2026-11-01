@@ -287,6 +287,14 @@
    "filterable": 1
   },
   {
+   "key": "taopian",
+   "name": "🕹️淘片┃采集",
+   "type": 1,
+   "api": "https://taopianapi.com/cjapi/mc/vod/json.html",
+   "searchable": 1,
+   "filterable": 0
+  },
+  {
    "key": "csp_非凡资源",
    "name": "🥗┃非凡┃资源",
    "type": 1,
