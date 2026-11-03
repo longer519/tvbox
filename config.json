@@ -67,6 +67,14 @@
    "filterable": 1
   },
   {
+   "key": "madouse.la",
+   "name": "★魔法(直连)",
+   "type": 1,
+   "api": "http://madouse.la/api.php/provide/vod/",
+   "searchable": 1,
+   "filterable": 1
+  },
+  {
    "key": "jingpinx.com",
    "name": "★精品下(直连)",
    "type": 1,
