@@ -34,7 +34,7 @@
  "https://api.apilyzy.com/api.php/provide/vod/": false,
  "http://c.小胡.icu/api.php/provide/vod/": false,
  "https://suoniapi.com/api.php/provide/vod/?ac=list": true,
- "https://taopianapi.com/cjapi/mc/vod/json.html": false,
+ "https://taopianapi.com/cjapi/mc/vod/json.html": true,
  "http://ffzy1.tv/api.php/provide/vod/": true,
  "https://lzizy1.com/api.php/provide/vod/": true,
  "https://49zy1.com/api.php/provide/vod/?ac=list": false,
