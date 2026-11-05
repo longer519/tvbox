@@ -24,6 +24,12 @@ RECOMMENDED = [
     "https://hhzyapi.com/api.php/provide/vod",
 ]
 
+# Extra sources kept in the "full / optional" list, but not pre-checked.
+EXTRA_FULL = [
+    {"name": "虎牙采集（偶发超时）", "url": "https://www.huyaapi.com/api.php/provide/vod"},
+    {"name": "索尼资源（可用率不稳）", "url": "https://suoniapi.com/api.php/provide/vod"},
+]
+
 ADULT_HINTS = (
     "成人", "麻豆", "色", "黄", "辣", "老色逼", "精品下", "魔法",
     "越南", "91", "玉兔", "av", "sapi", "xml.php", "apijson",
@@ -101,6 +107,8 @@ def main() -> None:
     for u in RECOMMENDED:
         host = urlsplit(u).netloc
         by_url.setdefault(u, {"name": NAME_MAP.get(host, host), "url": u})
+    for e in EXTRA_FULL:
+        by_url.setdefault(e["url"], e)
     picked = [by_url[u] for u in RECOMMENDED]
     live = [{"name": "自建直播 live.m3u（稳定·自托管）", "url": LIVE_M3U}]
 

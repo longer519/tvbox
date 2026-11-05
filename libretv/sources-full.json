@@ -33,6 +33,14 @@
     {
       "name": "火狐采集",
       "url": "https://hhzyapi.com/api.php/provide/vod"
+    },
+    {
+      "name": "虎牙采集（偶发超时）",
+      "url": "https://www.huyaapi.com/api.php/provide/vod"
+    },
+    {
+      "name": "索尼资源（可用率不稳）",
+      "url": "https://suoniapi.com/api.php/provide/vod"
     }
   ],
   "liveSources": [
