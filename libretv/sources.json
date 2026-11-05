@@ -1,0 +1,32 @@
+{
+  "name": "longer519 稳定源 · 推荐（影视+直播）",
+  "version": 2,
+  "sources": [
+    {
+      "name": "量子资源",
+      "url": "https://cj.lziapi.com/api.php/provide/vod"
+    },
+    {
+      "name": "非凡资源",
+      "url": "https://ffzy.tv/api.php/provide/vod"
+    },
+    {
+      "name": "百度采集",
+      "url": "https://api.apibdzy.com/api.php/provide/vod"
+    },
+    {
+      "name": "火狐采集",
+      "url": "https://hhzyapi.com/api.php/provide/vod"
+    },
+    {
+      "name": "虎牙采集",
+      "url": "https://www.huyaapi.com/api.php/provide/vod"
+    }
+  ],
+  "liveSources": [
+    {
+      "name": "自建直播 live.m3u（稳定·自托管）",
+      "url": "https://cdn.jsdelivr.net/gh/longer519/tvbox@main/live/live.m3u"
+    }
+  ]
+}

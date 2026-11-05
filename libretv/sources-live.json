@@ -1,0 +1,10 @@
+{
+  "name": "longer519 稳定源 · 纯直播",
+  "version": 2,
+  "liveSources": [
+    {
+      "name": "自建直播 live.m3u（稳定·自托管）",
+      "url": "https://cdn.jsdelivr.net/gh/longer519/tvbox@main/live/live.m3u"
+    }
+  ]
+}
