@@ -22,7 +22,6 @@ RECOMMENDED = [
     "https://ffzy.tv/api.php/provide/vod",
     "https://api.apibdzy.com/api.php/provide/vod",
     "https://hhzyapi.com/api.php/provide/vod",
-    "https://www.huyaapi.com/api.php/provide/vod",
 ]
 
 ADULT_HINTS = (

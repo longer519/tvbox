@@ -17,10 +17,6 @@
     {
       "name": "火狐采集",
       "url": "https://hhzyapi.com/api.php/provide/vod"
-    },
-    {
-      "name": "虎牙采集",
-      "url": "https://www.huyaapi.com/api.php/provide/vod"
     }
   ],
   "liveSources": [
