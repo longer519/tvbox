@@ -15,7 +15,7 @@
  "http://cj.ffzyapi.com/api.php/provide/vod": true,
  "https://ffzy.tv/api.php/provide/vod/": true,
  "https://apiyutu.com/api.php/provide/vod/at/xml/": true,
- "http://wmcj8.com/inc/sapi.php": false,
+ "http://wmcj8.com/inc/sapi.php": true,
  "http://apilj.com/api.php/provide/vod/at/json/": true,
  "http://91md.me/api.php/provide/vod/": true,
  "https://www.pgxdy.com/api/xml.php": true,
@@ -45,5 +45,5 @@
  "https://hhzyapi.com/api.php/provide/vod/": true,
  "https://app.bfzyapi.com/api.php/provide/vod/": true,
  "https://api.apibdzy.com/api.php/provide/vod/?ac=list": true,
- "https://mv.wogg.link/mv/vod": false
+ "https://mv.wogg.link/mv/vod": true
 }
