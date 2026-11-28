@@ -22,7 +22,7 @@
  "http://dadiapi.com/api.php": true,
  "http://api.11bat.com/api.php/provide/vod/at/xml": true,
  "https://api.maozyapi.com/inc/apijson_vod.php": false,
- "https://apittzy.com/api.php/provide/vod/": false,
+ "https://apittzy.com/api.php/provide/vod/": true,
  "https://www.gdlsp.com/api/xml.php": true,
  "https://www.msnii.com/api/xml.php": true,
  "https://www.xrbsp.com/api/xml.php": true,
